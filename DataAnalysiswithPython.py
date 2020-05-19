@@ -28,16 +28,16 @@ import pandas as pd
 import numpy as np
 
 import matplotlib.pyplot as plt
-get_ipython().system(' pip install seaborn')
+%matplotlib inline
+! pip install seaborn
 import seaborn as sns
-get_ipython().run_line_magic('matplotlib', 'inline')
 
+from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
 from scipy import stats
 import scipy.optimize as opt
-from sklearn import preprocessing
 
-get_ipython().system('conda install -c conda-forge/label/cf202003 wordcloud --yes')
+!conda install -c conda-forge/label/cf0202003 wordcloud --yes
 from wordcloud import WordCloud, STOPWORDS
 import string
 import collections
