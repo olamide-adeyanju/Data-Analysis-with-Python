@@ -1,0 +1,17 @@
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+! pip install seaborn
+import seaborn as sns
+
+from sklearn import preprocessing
+from sklearn.preprocessing import LabelEncoder
+from scipy import stats
+import scipy.optimize as opt
+
+!conda install -c conda-forge/label/cf0202003 wordcloud --yes
+from wordcloud import WordCloud, STOPWORDS
+import string
+import collections
