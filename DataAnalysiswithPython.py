@@ -21,15 +21,15 @@
 
 # Let's start by importing the libraries we will need for this data analysis.
 
-# In[1]:
+# In[2]:
 
 
 import pandas as pd
 import numpy as np
 
 import matplotlib.pyplot as plt
-%matplotlib inline
-! pip install seaborn
+get_ipython().run_line_magic('matplotlib', 'inline')
+get_ipython().system(' pip install seaborn')
 import seaborn as sns
 
 from sklearn import preprocessing
@@ -37,7 +37,7 @@ from sklearn.preprocessing import LabelEncoder
 from scipy import stats
 import scipy.optimize as opt
 
-!conda install -c conda-forge/label/cf0202003 wordcloud --yes
+get_ipython().system('conda install -c conda-forge/label/cf0202003 wordcloud --yes')
 from wordcloud import WordCloud, STOPWORDS
 import string
 import collections
@@ -50,7 +50,7 @@ print ('All libraries imported!')
 # 
 # The dataset is in .csv format, hence we use the pd.read_csv() function, if it was an excel file, we would use pd.read_excel(). 
 
-# In[2]:
+# In[3]:
 
 
 df = pd.read_csv(r'C:\Users\USER\Downloads\DatafinitiElectronicsProductData.csv')
@@ -64,7 +64,7 @@ df.head()
 
 # Let's confirm the size of the dataset imported.
 
-# In[3]:
+# In[4]:
 
 
 df.shape
@@ -74,7 +74,7 @@ df.shape
 
 # Let's check the columns we have so we can select the features useful for this analysis.
 
-# In[4]:
+# In[5]:
 
 
 df.columns
@@ -82,7 +82,7 @@ df.columns
 
 # There are quite a number of features not needed based on the aim of this analysis. Let's detect the ones we need and name it df1.
 
-# In[5]:
+# In[6]:
 
 
 df1 = df[['id', 'brand', 'categories', 'colors', 'name', 'reviews.date', 'reviews.doRecommend', 'reviews.rating', 'reviews.text']]
@@ -91,14 +91,14 @@ df1.head()
 
 # I will love to change a few column names(I don't like have "." in my column names). We would do this using the rename() function:
 
-# In[6]:
+# In[7]:
 
 
 df1.rename(columns={'reviews.date':'ReviewDate','reviews.doRecommend':'Recommend', 'reviews.rating':'Rating','reviews.text':'ReviewText'}, inplace=True)
 df1.columns
 
 
-# In[7]:
+# In[8]:
 
 
 df1.head()
@@ -106,7 +106,7 @@ df1.head()
 
 # Let's confirm the types of the variables.
 
-# In[8]:
+# In[9]:
 
 
 df1.dtypes
@@ -114,7 +114,7 @@ df1.dtypes
 
 # Notice the date format of the review date, in order to reduce redundancies, it will be best to have just the year of the review. We can achieve this by first converting the values to datetime type  and then change the format to year only. 
 
-# In[9]:
+# In[10]:
 
 
 df1['ReviewDate'] = pd.to_datetime(df1['ReviewDate'])
@@ -124,7 +124,7 @@ df1.head()
 
 # Let's understand the statistics of our data using the decribe() function:
 
-# In[10]:
+# In[11]:
 
 
 df1.describe()
@@ -134,7 +134,7 @@ df1.describe()
 # 
 # We can see the average rating is 4.37 hence the ratings in the dataset are mostly positive. We can see the statistics of the other variables by including the 'object' argument as shown below:
 
-# In[11]:
+# In[12]:
 
 
 df1.describe(include=['object'])
@@ -148,30 +148,30 @@ df1.describe(include=['object'])
 
 # Let's familiarise ourselves with the brands in this dataset and see how they are distributed.
 
-# In[12]:
+# In[13]:
 
 
 df1['brand'].value_counts().reset_index()
 
 
-# We have 37 brands and the top five most frequent ones are Logitech, Sony, Microsoft, JBL, and Samsung.
+# We have 38 brands and the top five most frequent ones are Logitech, Sony, Microsoft, JBL, and Samsung.
 
 # Let's compare the average ratings of the brands over the years. We can start by grouping the brands and sorting them according to their average ratings using the groupby() function. But first let's take a slice of the data for brands and their ratings.
 
-# In[13]:
+# In[14]:
 
 
 dfbrand=df1[['brand', 'Rating']]
 dfbrand.head()
 
 
-# In[14]:
+# In[15]:
 
 
 dfbrand=dfbrand.groupby('brand').mean().reset_index()
 
 
-# In[15]:
+# In[16]:
 
 
 dfbrand.head()
@@ -179,7 +179,7 @@ dfbrand.head()
 
 # Let's sort the brands according to their average ratings in descending order.
 
-# In[16]:
+# In[17]:
 
 
 dfbrand.sort_values(by=['Rating'], ascending=False)
@@ -191,7 +191,7 @@ dfbrand.sort_values(by=['Rating'], ascending=False)
 # 
 # The next step is to select the data containing information of these brands.
 
-# In[17]:
+# In[18]:
 
 
 dfbrand5= dfbrand.loc[dfbrand['brand'].isin(['Logitech','Sony', 'Microsoft', 'JBL', 'Samsung'])]
@@ -200,14 +200,14 @@ dfbrand5
 
 # Let's visualize this using a bar plot, however, we would have to set the brand as index first for accurate plot interpretation.
 
-# In[18]:
+# In[19]:
 
 
 dfbrand5.set_index('brand', inplace=True)
 dfbrand5.head()
 
 
-# In[21]:
+# In[20]:
 
 
 dfbrand5.plot(kind='bar', figsize=(14, 10))
@@ -220,20 +220,20 @@ plt.show()
 
 # We can see Microsoft has the best average rating followed by Sony and Samsung. We can also plot the chart as a horizontal bar plot by changing the kind to 'barh' instead of 'bar', we can also change the color of the chart and adjust the size as shown below
 
-# In[19]:
+# In[21]:
 
 
 dfbrand5.plot(kind='barh', figsize=(8, 6), color='red')
 plt.title('Ratings of Top 5 most common Brands')
-plt.ylabel('Rating')
-plt.xlabel('Brand')
+plt.ylabel('Brand')
+plt.xlabel('Rating')
 
 plt.show()
 
 
 # Why don't we examine the three top rated brands of this plot (Microsoft, Sony, Samsung) and see the trend of their ratings over the years. We will need the review date variable for this, so we have to slice from the data set the reveiw date, brand and ratings.
 
-# In[20]:
+# In[22]:
 
 
 dftrend = df1[['ReviewDate', 'brand', 'Rating']]
@@ -242,14 +242,14 @@ dftrend.head()
 
 # To make it easier to select the brands with .loc, let's set the brand as the index and transpose the data.
 
-# In[21]:
+# In[23]:
 
 
 dftrend.set_index('brand', inplace=True)
 dftrend.head()
 
 
-# In[22]:
+# In[24]:
 
 
 dftrend.transpose()
@@ -257,7 +257,7 @@ dftrend.transpose()
 
 # Let's start with Microsoft:
 
-# In[23]:
+# In[25]:
 
 
 dftrendm=dftrend.loc[['Microsoft']]
@@ -266,14 +266,14 @@ dftrendm
 
 # We can see the presence of NaN values, let's drop them first.
 
-# In[24]:
+# In[26]:
 
 
 dftrendm = dftrendm.dropna()
 dftrendm
 
 
-# In[25]:
+# In[27]:
 
 
 sns.lineplot(y="Rating", x="ReviewDate",data = dftrendm)
@@ -283,21 +283,21 @@ sns.lineplot(y="Rating", x="ReviewDate",data = dftrendm)
 # 
 # Let's checkout Sony's performance over the years according to this data set:
 
-# In[26]:
+# In[28]:
 
 
 dftrendso=dftrend.loc[['Sony']]
 dftrendso
 
 
-# In[27]:
+# In[29]:
 
 
 dftrendso = dftrendso.dropna()
 dftrendso
 
 
-# In[28]:
+# In[30]:
 
 
 sns.lineplot(y="Rating", x="ReviewDate",data = dftrendso)
@@ -309,14 +309,14 @@ sns.lineplot(y="Rating", x="ReviewDate",data = dftrendso)
 # 
 # Lastly, let's examine's Samsung's trend.
 
-# In[29]:
+# In[31]:
 
 
 dftrendsa=dftrend.loc[['Samsung']]
 dftrendsa
 
 
-# In[30]:
+# In[32]:
 
 
 sns.lineplot(y="Rating", x="ReviewDate",data = dftrendsa)
@@ -332,7 +332,7 @@ sns.lineplot(y="Rating", x="ReviewDate",data = dftrendsa)
 # 
 # First, let's select the variables we want:
 
-# In[31]:
+# In[33]:
 
 
 dfcorr = df1[['brand', 'categories', 'colors', 'Rating', 'Recommend']]
@@ -341,7 +341,7 @@ dfcorr
 
 # We would have to drop rows with missing/NaN values. 
 
-# In[32]:
+# In[34]:
 
 
 dfcorr=dfcorr.dropna()
@@ -350,7 +350,7 @@ dfcorr
 
 # Let's convert them to numerical values except 'Rating' which is already type float.
 
-# In[33]:
+# In[35]:
 
 
 le = LabelEncoder() 
@@ -363,7 +363,7 @@ dfcorr
 
 # We can run a correlation analysis on the whole data with a single line of code. This will generate a correlation matrix that will show the strength of correlation between each variable and product recommendation.
 
-# In[34]:
+# In[36]:
 
 
 dfcorr.corr()
@@ -373,33 +373,28 @@ dfcorr.corr()
 
 # We can also calculate the correlation coefficient and check the P-value (to measure statistical significance) using scipy. Since only rating shows correlation with recommendation, let's first slice out a fresh data set for ratings and recommendation, this is to include rows dropped due to the missing values of other variables.
 
-# In[35]:
+# In[37]:
 
 
 dfrr= df1[['Rating', 'Recommend']]
 dfrr
 
 
-# In[36]:
+# In[38]:
 
 
 dfrr=dfrr.dropna()
-
-
-# In[37]:
-
-
 dfrr
 
 
-# In[38]:
+# In[39]:
 
 
 dfrr['Recommend'] = le.fit_transform(dfrr['Recommend'])
 dfrr
 
 
-# In[39]:
+# In[40]:
 
 
 pearson_coef, p_value = stats.pearsonr(dfrr['Rating'], dfrr['Recommend'])
@@ -418,14 +413,14 @@ print("The Pearson Correlation Coefficient is", pearson_coef, " with a P-value o
 
 # Let's start by defining our X (Independent/predictor variable-Rating) and y(Dependent variable - Recommend)
 
-# In[40]:
+# In[41]:
 
 
 X = np.asarray(dfrr[['Rating']])
 X[0:5]
 
 
-# In[41]:
+# In[42]:
 
 
 y = np.asarray(dfrr['Recommend'])
@@ -438,7 +433,7 @@ y [0:5]
 # 
 # Random state ensures that the splits that we generate are reproducible. Scikit-learn uses random permutations to generate the splits.
 
-# In[42]:
+# In[43]:
 
 
 from sklearn.model_selection import train_test_split
@@ -449,7 +444,7 @@ print ('Test set:', X_test.shape,  y_test.shape)
 
 # Next step is to fit the model using the train data set:
 
-# In[43]:
+# In[44]:
 
 
 from sklearn.linear_model import LogisticRegression
@@ -459,7 +454,7 @@ LR
 
 # Using thr fit model, let's use the test set to predict recommendation:
 
-# In[44]:
+# In[45]:
 
 
 yhat = LR.predict(X_test)
@@ -474,7 +469,7 @@ yhat[0:5]
 # 
 # **Confusion Matrix** summarises number of correct and incorrect predictions with count values and break them down by each class.
 
-# In[45]:
+# In[46]:
 
 
 from sklearn.metrics import jaccard_similarity_score
@@ -485,7 +480,7 @@ jaccard_similarity_score(y_test, yhat)
 
 # Let's try confusion matrix:
 
-# In[46]:
+# In[47]:
 
 
 from sklearn import metrics
@@ -493,7 +488,7 @@ cnf_matrix = metrics.confusion_matrix(y_test, yhat)
 cnf_matrix
 
 
-# In[47]:
+# In[48]:
 
 
 class_names=[0,1] # name  of classes
@@ -510,7 +505,7 @@ plt.ylabel('Actual label')
 plt.xlabel('Predicted label')
 
 
-# In[48]:
+# In[49]:
 
 
 print("Accuracy:",metrics.accuracy_score(y_test, yhat))
@@ -526,7 +521,7 @@ print("Recall:",metrics.recall_score(y_test, yhat))
 
 # Let's start with positive ratings i.e 4 and 5 star ratings:
 
-# In[49]:
+# In[50]:
 
 
 dfrate=df1[['Rating', 'ReviewText']]
@@ -535,21 +530,21 @@ dfrate
 
 # Let's drop NaN values
 
-# In[50]:
+# In[51]:
 
 
 dfrate=dfrate.dropna()
 dfrate
 
 
-# In[51]:
+# In[52]:
 
 
 dfrate['Rating']=dfrate['Rating'].astype(int)
 dfrate
 
 
-# In[52]:
+# In[53]:
 
 
 dfpos= dfrate.loc[dfrate['Rating'].isin([4, 5])]
@@ -560,7 +555,7 @@ dfpos
 # 
 # We start by converting all to lower case to avoid repetitions.
 
-# In[53]:
+# In[54]:
 
 
 dfpos['ReviewText']= dfpos['ReviewText'].str.lower()
@@ -569,7 +564,7 @@ dfpos['ReviewText'].head()
 
 # Next step is to split and remove all punctuation marks.
 
-# In[54]:
+# In[55]:
 
 
 dfpos1 = dfpos['ReviewText'].str.split(' ')
@@ -578,13 +573,7 @@ dfpos1.head()
 
 # The next step is to join all the 'ReviewText' data in order to be able to work with word cloud.
 
-# In[23]:
-
-
-
-
-
-# In[55]:
+# In[57]:
 
 
 dfposcleaned = []
@@ -600,7 +589,7 @@ final_Pos_Rev = " ".join(Pos_Rev)
 final_Pos_Rev[:500]
 
 
-# In[56]:
+# In[58]:
 
 
 wordcloud_revpos = WordCloud(background_color="white").generate(final_Pos_Rev)
@@ -613,7 +602,7 @@ plt.show()
 
 # The more frequent the word, the larger it is. This word cloud shows that speaker, great, remote are the most frequent in reviews with positve ratings.
 
-# In[57]:
+# In[59]:
 
 
 stopwords = set(STOPWORDS)
@@ -631,28 +620,28 @@ plt.show()
 # 
 # Let's look at negative ratings i.e 1 and 2 star ratings. 
 
-# In[58]:
+# In[60]:
 
 
 dfneg= dfrate.loc[dfrate['Rating'].isin([1, 2])]
 dfneg
 
 
-# In[59]:
+# In[61]:
 
 
 dfneg['ReviewText']= dfneg['ReviewText'].str.lower()
 dfneg['ReviewText'].head()
 
 
-# In[60]:
+# In[62]:
 
 
 dfneg = dfneg['ReviewText'].str.split(' ')
 dfneg.head()
 
 
-# In[61]:
+# In[63]:
 
 
 dfnegcleaned = []
@@ -668,7 +657,7 @@ final_Neg_Rev = " ".join(Neg_Rev)
 final_Neg_Rev[:500]
 
 
-# In[62]:
+# In[64]:
 
 
 wordcloud_revneg = WordCloud(background_color="white", max_font_size=50, max_words=100).generate(final_Neg_Rev)
@@ -681,7 +670,7 @@ plt.show()
 
 # Let's remove less meaningful words using stop words
 
-# In[63]:
+# In[65]:
 
 
 stopwords2 = set(STOPWORDS)
@@ -699,7 +688,7 @@ plt.show()
 # 
 # We can also check the most frquent words and read them into a table. In this case the top 20 most common words in reviews with positive and negative ratings.
 
-# In[64]:
+# In[66]:
 
 
 filtered_posrev = [word for word in final_Pos_Rev.split() if word not in stopwords]
@@ -718,7 +707,7 @@ for i,j in word_count_pos.items():
 
 # Let's repeat the process for negative reviews.
 
-# In[65]:
+# In[67]:
 
 
 filtered_negrev = [word for word in final_Neg_Rev.split() if word not in stopwords2]
