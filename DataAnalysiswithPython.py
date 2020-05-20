@@ -409,7 +409,7 @@ print("The Pearson Correlation Coefficient is", pearson_coef, " with a P-value o
 # 
 # This means that if a customer rates a product positively, there is likelihood that he/she will recommend the product to someone else or a potential customer. Let's model the relationship between ratings and recommendation in order to get introduced to machine learning/ regression analysis with Python.
 # 
-# Because the 'Recommend' variable is binary, i.e, either True(1) or False(2), it is best to use logistic regression.
+# Because the 'Recommend' variable is binary, i.e, either True(1) or False(0), it is best to use logistic regression.
 
 # Let's start by defining our X (Independent/predictor variable-Rating) and y(Dependent variable - Recommend)
 
@@ -452,7 +452,7 @@ LR = LogisticRegression(C=0.01, solver='liblinear').fit(X_train,y_train)
 LR
 
 
-# Using thr fit model, let's use the test set to predict recommendation:
+# Using the fit model, let's use the test set to predict recommendation:
 
 # In[45]:
 
@@ -562,7 +562,7 @@ dfpos['ReviewText']= dfpos['ReviewText'].str.lower()
 dfpos['ReviewText'].head()
 
 
-# Next step is to split and remove all punctuation marks.
+# Next step is to split.
 
 # In[55]:
 
