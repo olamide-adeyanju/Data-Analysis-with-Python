@@ -43,7 +43,7 @@ The Python libraries used in this tutorial are listed in a separate text file in
    pip install -r libraries.txt
 3. **Run the script:**
  ```bash
-   DataAnalysisWithPython.py
+   DataAnalysiswithPython.py
 ```
 ## Key Concepts and Techniques
 - Data Import and Cleaning: Load data using pandas and clean it for analysis.Exploratory Data Analysis (EDA): Use matplotlib and seaborn for data visualization.Statistical Analysis: Conduct correlation analysis to explore relationships between variables.Machine Learning: Use logistic regression to model and predict product recommendations.Text Analytics: Analyze review sentiments using word clouds.Conclusion and Recommendations
