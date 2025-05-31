@@ -5,7 +5,7 @@
 # ### Working with Real World Data Sets
 # 
 # 
-# ### By Olamide Idowu
+# ### By Olamide Adeyanju
 
 # Welcome to this tutorial on data analysis with Python. This tutorial is a practical guide for beginners to learn how to use Python for data analysis using real world data sets. 
 # 
